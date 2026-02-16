@@ -131,6 +131,8 @@ Use canonical variable names for new installs. Legacy aliases are still supporte
 ## Support
 
 - Email: `support@reconstack.dev`
+- GitHub Sponsors: `https://github.com/sponsors/ciaran-png` (tiers: `$5`, `$25`, `$100` monthly; profile approval may be pending)
+- Direct support subscription plans: `$29`, `$59`, `$99` monthly (configured on `landing-page/index.html` checkout links)
 
 ## License
 

@@ -206,7 +206,7 @@ section .section-sub {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 24px;
-  max-width: 800px;
+  max-width: 1100px;
   margin: 0 auto;
 }
 .price-card {
@@ -619,8 +619,8 @@ footer {
 <!-- Pricing -->
 <section id="pricing">
   <div class="container">
-    <h2>Simple Pricing</h2>
-    <p class="section-sub">One purchase. All 21 servers. Lifetime updates. BYOK provider model.</p>
+    <h2>Choose Your Plan</h2>
+    <p class="section-sub">Use the free tier, buy lifetime access, or subscribe for monthly support and power-user onboarding.</p>
 
     <div class="pricing-grid">
       <div class="price-card">
@@ -637,7 +637,7 @@ footer {
         <a href="#" class="btn btn-secondary" id="btn-free">Download Free</a>
       </div>
 
-      <div class="price-card featured">
+      <div class="price-card">
         <h3>Pro</h3>
         <div class="price">$49 <span>one-time</span></div>
         <p class="price-alt">or $149 for team license (up to 10 seats)</p>
@@ -651,12 +651,27 @@ footer {
         </ul>
         <a href="#" class="btn btn-primary" id="btn-pro">Get Pro — $49</a>
       </div>
+
+      <div class="price-card featured">
+        <h3>Power User Subscription</h3>
+        <div class="price">$29-$99 <span>/month</span></div>
+        <p class="price-alt">$29 Solo • $59 Pro Ops • $99 Team SOC</p>
+        <ul>
+          <li>Full 21-server ReconStack suite</li>
+          <li>Priority support with faster response targets</li>
+          <li>Power-user onboarding and setup help</li>
+          <li>Monthly implementation guidance</li>
+          <li>Ideal for analysts, consultants, and small teams</li>
+          <li>Includes all future updates while subscribed</li>
+        </ul>
+        <a href="#" class="btn btn-primary" id="btn-subscription">Start Subscription — $29/mo</a>
+      </div>
     </div>
     <p style="text-align: center; margin-top: 14px; color: var(--text-dim); font-size: 13px;">
       BYOK policy: ReconStack provides the integration layer. Third-party API subscriptions are not included.
     </p>
     <p style="text-align: center; margin-top: 10px; color: var(--text-dim); font-size: 13px;">
-      Seller note: replace both <code>href=\"#\"</code> purchase links with your Gumroad product URLs before publishing.
+      Seller note: replace each <code>href=\"#\"</code> purchase link with your live checkout URLs (Free, Pro, and Subscription).
     </p>
   </div>
 </section>
