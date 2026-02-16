@@ -6,6 +6,13 @@ ReconStack is a production MCP suite for security reconnaissance and OSINT workf
 - Free tier: **8**
 - Pro add-on tier: **13**
 
+## BYOK Policy
+
+ReconStack is a connector and automation layer. Third-party API subscriptions are **not** included.
+
+- You bring your own API keys (BYOK) for providers like Shodan, VirusTotal, DeHashed, Telegram, and Google APIs.
+- Keyless tools remain fully usable without paid provider subscriptions.
+
 ## Tier Breakdown
 
 ### Free Tier (8)
@@ -32,6 +39,11 @@ ReconStack is a production MCP suite for security reconnaissance and OSINT workf
 - `telegram-mcp`
 - `urban-scout-mcp`
 - `virustotal-mcp`
+
+## Dorking Server Roles (No Overlap)
+
+- `dorking`: advanced multi-backend dork workflow server (presets, caching, multi-query orchestration, backend failover).
+- `google-dorker`: lightweight Google Programmable Search executor for targeted, fast dork queries.
 
 ## Repository Layout
 
@@ -74,7 +86,7 @@ After restarting Claude Desktop, all ReconStack servers will be available.
 docker compose up -d
 ```
 
-This launches all 21 services.
+This launches all 21 MCP services and a preconfigured Neo4j database container for `neo4j-osint`.
 
 ## Environment Variables
 

@@ -2,6 +2,16 @@
 
 A production-grade Google dorking tool with intelligent backend fallback, caching, and quality filtering.
 
+## Positioning in ReconStack
+
+Use this server for advanced workflow-style dorking:
+
+- Multi-query orchestration (`dork_target`, `multi_dork`)
+- Preset-driven reconnaissance and report-style output
+- Backend failover and cache-aware execution
+
+If you only need direct lightweight Google query execution, use `servers/google-dorker` instead.
+
 ## Key Features
 
 - **Google Custom Search API** as primary backend

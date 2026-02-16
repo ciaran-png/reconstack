@@ -2,6 +2,13 @@
 
 Google Programmable Search dorking server for targeted web exposure queries.
 
+## Positioning in ReconStack
+
+This server is the lightweight direct executor for fast Google Programmable Search runs.
+
+- Use this for quick targeted dork execution.
+- Use `servers/dorking` for advanced multi-query workflows, caching, and backend failover.
+
 ## Setup
 
 ```bash

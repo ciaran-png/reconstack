@@ -10,9 +10,23 @@ pip install -r requirements.txt
 python3 -m src.server
 ```
 
+### Docker Compose (instant local graph backend)
+
+From the repo root:
+
+```bash
+docker compose up -d neo4j neo4j-osint
+```
+
+Default compose credentials:
+
+- URI: `bolt://neo4j:7687`
+- User: `neo4j`
+- Password: `reconstack_dev_password` (change via `.env`)
+
 ## Required Environment Variables
 
-- `NEO4J_URI` (default: `bolt://localhost:7687`)
+- `NEO4J_URI` (default: `bolt://localhost:7687` for local runs, `bolt://neo4j:7687` in compose)
 - `NEO4J_USER` (default: `neo4j`)
 - `NEO4J_PASSWORD` (required for authenticated database access)
 - `SQLITE_DB_PATH` (required only for SQLite sync tools)
