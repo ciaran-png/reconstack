@@ -1,5 +1,5 @@
 # ReconStack — Docker Compose
-# Start all 21 MCP servers with one command (+ bundled Neo4j for graph workflows)
+# Start all 22 MCP servers with one command (+ bundled Neo4j for graph workflows)
 
 x-common: &common
   restart: unless-stopped
@@ -156,7 +156,7 @@ services:
       - "7474:7474"
       - "7687:7687"
     healthcheck:
-      test: ["CMD-SHELL", "cypher-shell -a bolt://localhost:7687 -u ${NEO4J_USER:-neo4j} -p ${NEO4J_PASSWORD:-reconstack_dev_password} 'RETURN 1' >/dev/null 2>&1"]
+      test: [ "CMD-SHELL", "cypher-shell -a bolt://localhost:7687 -u ${NEO4J_USER:-neo4j} -p ${NEO4J_PASSWORD:-reconstack_dev_password} 'RETURN 1' >/dev/null 2>&1" ]
       interval: 10s
       timeout: 5s
       retries: 15
@@ -257,6 +257,19 @@ services:
     ports:
       - "9119:9119"
 
+  investigation-db:
+    <<: *common
+    container_name: reconstack-investigation-db
+    command: python3 -m src.server
+    working_dir: /app
+    volumes:
+      - ./servers/investigation-db:/app
+      - investigation_db_data:/app/data
+    environment:
+      - INVESTIGATION_DB_PATH=${INVESTIGATION_DB_PATH:-/app/data/investigation.sqlite}
+    ports:
+      - "9121:9121"
+
   virustotal:
     <<: *common
     container_name: reconstack-virustotal
@@ -276,3 +289,4 @@ networks:
 volumes:
   neo4j_data:
   neo4j_logs:
+  investigation_db_data:

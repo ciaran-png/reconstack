@@ -1,0 +1,4 @@
+# MCP SDK
+mcp>=1.0.0
+
+# No additional dependencies — uses stdlib sqlite3

@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "investigation-db"
+version = "1.0.0"
+description = "SQLite-backed Investigation Notebook MCP Server"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "mcp>=1.0.0",
+]
+
+[project.scripts]
+investigation-db = "src.server:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
