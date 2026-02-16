@@ -1,0 +1,22 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    exiftool \
+    git \
+    nmap \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY servers /tmp/servers
+RUN set -eux; \
+    for d in /tmp/servers/*; do \
+      if [ -f "$d/requirements.txt" ]; then \
+        pip install --no-cache-dir -r "$d/requirements.txt" || true; \
+      elif [ -f "$d/pyproject.toml" ]; then \
+        pip install --no-cache-dir "$d" || true; \
+      fi; \
+    done; \
+    rm -rf /tmp/servers
+
+CMD ["python3", "server.py"]

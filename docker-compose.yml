@@ -1,0 +1,247 @@
+# ReconStack — Docker Compose
+# Start all 21 MCP servers with one command
+
+x-common: &common
+  restart: unless-stopped
+  build:
+    context: .
+    dockerfile: Dockerfile.python
+  networks:
+    - reconstack
+
+services:
+  # === Free tier ===
+  crtsh:
+    <<: *common
+    container_name: reconstack-crtsh
+    command: python3 /app/server.py
+    volumes:
+      - ./servers/crtsh-mcp:/app
+    ports:
+      - "9100:9100"
+
+  dorker:
+    <<: *common
+    container_name: reconstack-dorker
+    command: python3 /app/server.py
+    volumes:
+      - ./servers/dorking:/app
+    environment:
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
+      - GOOGLE_CSE_ID=${GOOGLE_CSE_ID:-}
+      - GOOGLE_CX=${GOOGLE_CX:-}
+      - BING_API_KEY=${BING_API_KEY:-}
+      - SERPAPI_KEY=${SERPAPI_KEY:-}
+      - BRAVE_API_KEY=${BRAVE_API_KEY:-}
+    ports:
+      - "9101:9101"
+
+  exiftool:
+    <<: *common
+    container_name: reconstack-exiftool
+    command: python3 /app/server.py
+    volumes:
+      - ./servers/exiftool-mcp:/app
+    ports:
+      - "9102:9102"
+
+  google-dorker:
+    <<: *common
+    container_name: reconstack-google-dorker
+    command: python3 /app/server.py
+    volumes:
+      - ./servers/google-dorker:/app
+    environment:
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
+      - GOOGLE_CSE_ID=${GOOGLE_CSE_ID:-}
+      - GOOGLE_CX=${GOOGLE_CX:-}
+    ports:
+      - "9103:9103"
+
+  holehe:
+    <<: *common
+    container_name: reconstack-holehe
+    command: python3 /app/server.py
+    volumes:
+      - ./servers/holehe-mcp:/app
+    ports:
+      - "9104:9104"
+
+  social-analyzer:
+    <<: *common
+    container_name: reconstack-social-analyzer
+    command: python3 /app/server.py
+    volumes:
+      - ./servers/social-analyzer-mcp:/app
+    ports:
+      - "9105:9105"
+
+  trufflehog:
+    <<: *common
+    container_name: reconstack-trufflehog
+    command: python3 /app/server.py
+    volumes:
+      - ./servers/trufflehog-mcp:/app
+    ports:
+      - "9106:9106"
+
+  wayback:
+    <<: *common
+    container_name: reconstack-wayback
+    command: python3 /app/server.py
+    volumes:
+      - ./servers/wayback-mcp:/app
+    ports:
+      - "9107:9107"
+
+  # === Pro tier add-ons ===
+  corpdata:
+    <<: *common
+    container_name: reconstack-corpdata
+    command: python3 /app/server.py
+    volumes:
+      - ./servers/corpdata-mcp:/app
+    environment:
+      - COMPANIES_HOUSE_API_KEY=${COMPANIES_HOUSE_API_KEY:-}
+    ports:
+      - "9108:9108"
+
+  dehashed:
+    <<: *common
+    container_name: reconstack-dehashed
+    command: python3 /app/server.py
+    volumes:
+      - ./servers/dehashed-mcp:/app
+    environment:
+      - DEHASHED_API_KEY=${DEHASHED_API_KEY:-}
+      - DEHASHED_EMAIL=${DEHASHED_EMAIL:-}
+    ports:
+      - "9109:9109"
+
+  dnslytics:
+    <<: *common
+    container_name: reconstack-dnslytics
+    command: python3 /app/dnslytics_mcp.py
+    volumes:
+      - ./servers/dnslytics-mcp:/app
+    ports:
+      - "9110:9110"
+
+  gitdorker:
+    <<: *common
+    container_name: reconstack-gitdorker
+    command: python3 /app/server.py
+    volumes:
+      - ./servers/gitdorker-mcp:/app
+    environment:
+      - GITHUB_TOKEN=${GITHUB_TOKEN:-}
+    ports:
+      - "9111:9111"
+
+  neo4j-osint:
+    <<: *common
+    container_name: reconstack-neo4j-osint
+    command: python3 -m src.server
+    working_dir: /app
+    volumes:
+      - ./servers/neo4j-osint:/app
+    environment:
+      - NEO4J_URI=${NEO4J_URI:-}
+      - NEO4J_USER=${NEO4J_USER:-}
+      - NEO4J_PASSWORD=${NEO4J_PASSWORD:-}
+      - SQLITE_DB_PATH=${SQLITE_DB_PATH:-}
+    ports:
+      - "9112:9112"
+
+  nmap:
+    <<: *common
+    container_name: reconstack-nmap
+    command: python3 /app/nmap_mcp/server.py
+    volumes:
+      - ./servers/nmap-mcp:/app
+    ports:
+      - "9113:9113"
+
+  opencorporates:
+    <<: *common
+    container_name: reconstack-opencorporates
+    command: python3 /app/server.py
+    volumes:
+      - ./servers/opencorporates-mcp:/app
+    environment:
+      - OPENCORPORATES_API_KEY=${OPENCORPORATES_API_KEY:-}
+    ports:
+      - "9114:9114"
+
+  phoneinfoga:
+    <<: *common
+    container_name: reconstack-phoneinfoga
+    command: python3 /app/server.py
+    volumes:
+      - ./servers/phoneinfoga-mcp:/app
+    ports:
+      - "9115:9115"
+
+  sherlockeye:
+    <<: *common
+    container_name: reconstack-sherlockeye
+    command: python3 /app/server.py
+    volumes:
+      - ./servers/sherlockeye-mcp:/app
+    environment:
+      - SHERLOCKEYE_API_KEY=${SHERLOCKEYE_API_KEY:-}
+    ports:
+      - "9116:9116"
+
+  shodan:
+    <<: *common
+    container_name: reconstack-shodan
+    command: python3 /app/server.py
+    volumes:
+      - ./servers/shodan-mcp:/app
+    environment:
+      - SHODAN_API_KEY=${SHODAN_API_KEY:-}
+    ports:
+      - "9117:9117"
+
+  telegram:
+    <<: *common
+    container_name: reconstack-telegram
+    command: python3 /app/server.py
+    volumes:
+      - ./servers/telegram-mcp:/app
+    environment:
+      - TELEGRAM_API_ID=${TELEGRAM_API_ID:-}
+      - TELEGRAM_API_HASH=${TELEGRAM_API_HASH:-}
+      - TG_API_ID=${TG_API_ID:-}
+      - TG_API_HASH=${TG_API_HASH:-}
+    ports:
+      - "9118:9118"
+
+  urban-scout:
+    <<: *common
+    container_name: reconstack-urban-scout
+    command: python3 /app/urban_scout.py
+    volumes:
+      - ./servers/urban-scout-mcp:/app
+    environment:
+      - GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY:-}
+      - URBAN_SCOUT_API_KEY=${URBAN_SCOUT_API_KEY:-}
+    ports:
+      - "9119:9119"
+
+  virustotal:
+    <<: *common
+    container_name: reconstack-virustotal
+    command: python3 /app/server.py
+    volumes:
+      - ./servers/virustotal-mcp:/app
+    environment:
+      - VIRUSTOTAL_API_KEY=${VIRUSTOTAL_API_KEY:-}
+      - VT_API_KEY=${VT_API_KEY:-}
+    ports:
+      - "9120:9120"
+
+networks:
+  reconstack:
+    driver: bridge

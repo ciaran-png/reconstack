@@ -1,0 +1,49 @@
+ReconStack Commercial License
+
+Copyright (c) 2025-2026 ReconStack. All rights reserved.
+
+TERMS OF USE
+
+1. GRANT OF LICENSE
+   This license grants the purchaser a non-exclusive, non-transferable right
+   to use ReconStack software for personal or internal business purposes.
+
+2. FREE TIER
+   The free tier servers (`crtsh-mcp`, `dorking`, `exiftool-mcp`,
+   `google-dorker`, `holehe-mcp`, `social-analyzer-mcp`,
+   `trufflehog-mcp`, and `wayback-mcp`) are provided under the MIT License.
+   You may use, modify, and redistribute these servers freely.
+
+3. PRO TIER — INDIVIDUAL LICENSE ($49)
+   - Licensed to a single individual
+   - May be installed on unlimited personal machines
+   - May be used for commercial security research and consulting
+   - May NOT be redistributed, resold, or sublicensed
+   - May NOT be included in competing products or services
+
+4. PRO TIER — TEAM LICENSE ($149)
+   - Licensed to a single organization (up to 10 seats)
+   - May be deployed on shared infrastructure within the organization
+   - Same restrictions as Individual License apply per organization
+
+5. RESTRICTIONS
+   You may NOT:
+   - Redistribute or resell ReconStack or any component thereof
+   - Remove or alter copyright notices or license files
+   - Use ReconStack to build a competing MCP server marketplace
+   - Sublicense ReconStack to third parties
+   - Host ReconStack as a public SaaS offering
+
+6. DISCLAIMER
+   ReconStack is provided "AS IS" without warranty of any kind. The authors
+   are not liable for any damages arising from the use of this software.
+
+   ReconStack is intended for authorized security research, penetration
+   testing, and open-source intelligence gathering only. Users are solely
+   responsible for ensuring their use complies with all applicable laws
+   and regulations.
+
+7. UPDATES
+   Pro license holders receive free updates for one year from purchase date.
+
+For questions: support@reconstack.dev

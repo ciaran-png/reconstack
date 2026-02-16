@@ -1,0 +1,16 @@
+# Dorker MCP Server v2.0 Dependencies
+
+# MCP Framework
+mcp>=1.0.0
+
+# HTTP Client
+httpx>=0.25.0
+
+# HTML Parsing
+beautifulsoup4>=4.12.0
+lxml>=5.0.0
+
+# Data Validation
+pydantic>=2.0.0
+
+# Note: sqlite3 is built into Python stdlib

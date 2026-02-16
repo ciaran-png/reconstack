@@ -1,0 +1,19 @@
+# MCP SDK
+mcp>=1.0.0
+
+# Neo4j
+neo4j>=5.15.0
+
+# Database
+aiosqlite>=0.19.0
+
+# Utilities
+python-dotenv>=1.0.0
+pydantic>=2.5.0
+httpx>=0.25.0
+
+# Graph algorithms (local fallback if GDS not available)
+networkx>=3.2.0
+
+# Data processing
+pandas>=2.1.0

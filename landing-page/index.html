@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReconStack — OSINT & Security MCP Suite</title>
+<meta name="description" content="21 production-grade MCP servers for security reconnaissance, threat intelligence, and OSINT. Works with Claude, Cursor, Windsurf.">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #0a0a0f;
+  --surface: #12121a;
+  --surface2: #1a1a26;
+  --border: #2a2a3a;
+  --text: #e0e0e8;
+  --text-dim: #8888a0;
+  --accent: #00d4aa;
+  --accent2: #00b894;
+  --red: #ff4757;
+  --orange: #ffa502;
+  --blue: #3742fa;
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Hero */
+.hero {
+  text-align: center;
+  padding: 80px 20px 60px;
+  background: linear-gradient(180deg, #0d1117 0%, var(--bg) 100%);
+  border-bottom: 1px solid var(--border);
+}
+.hero-badge {
+  display: inline-block;
+  background: rgba(0,212,170,0.1);
+  border: 1px solid rgba(0,212,170,0.3);
+  color: var(--accent);
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-bottom: 24px;
+}
+.hero h1 {
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero .subtitle {
+  font-size: clamp(16px, 2.5vw, 20px);
+  color: var(--text-dim);
+  max-width: 640px;
+  margin: 0 auto 32px;
+}
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+.hero-stat {
+  text-align: center;
+}
+.hero-stat .num {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--accent);
+}
+.hero-stat .label {
+  font-size: 13px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* CTA Buttons */
+.cta-group {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-primary {
+  background: var(--accent);
+  color: #000;
+}
+.btn-primary:hover {
+  background: var(--accent2);
+  transform: translateY(-1px);
+  text-decoration: none;
+  color: #000;
+}
+.btn-secondary {
+  background: var(--surface2);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+.btn-secondary:hover {
+  background: var(--border);
+  text-decoration: none;
+}
+
+/* Container */
+.container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+/* Sections */
+section { padding: 80px 0; }
+section h2 {
+  font-size: 32px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 12px;
+}
+section .section-sub {
+  text-align: center;
+  color: var(--text-dim);
+  margin-bottom: 48px;
+  font-size: 16px;
+}
+
+/* Server Grid */
+.category {
+  margin-bottom: 48px;
+}
+.category-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.category-header .icon { font-size: 20px; }
+.category-header h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+}
+.server-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+.server-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  transition: border-color 0.2s;
+}
+.server-card:hover { border-color: var(--accent); }
+.server-card .name {
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+.server-card .desc {
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+.server-card .meta {
+  display: flex;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+.tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.tag-free { background: rgba(0,212,170,0.15); color: var(--accent); }
+.tag-pro { background: rgba(255,165,2,0.15); color: var(--orange); }
+.tag-lines { color: var(--text-dim); }
+
+/* Pricing */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+.price-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 32px;
+  text-align: center;
+}
+.price-card.featured {
+  border-color: var(--accent);
+  background: linear-gradient(180deg, rgba(0,212,170,0.05) 0%, var(--surface) 100%);
+}
+.price-card h3 {
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+.price-card .price {
+  font-size: 48px;
+  font-weight: 800;
+  margin: 16px 0;
+}
+.price-card .price span { font-size: 16px; font-weight: 400; color: var(--text-dim); }
+.price-card .price-alt {
+  font-size: 14px;
+  color: var(--text-dim);
+  margin-top: -8px;
+  margin-bottom: 16px;
+}
+.price-card ul {
+  list-style: none;
+  text-align: left;
+  margin: 24px 0;
+}
+.price-card li {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+.price-card li::before {
+  content: "✓ ";
+  color: var(--accent);
+  font-weight: bold;
+}
+.price-card .btn { width: 100%; justify-content: center; }
+
+/* How it works */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+.step {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px;
+}
+.step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: rgba(0,212,170,0.15);
+  color: var(--accent);
+  border-radius: 50%;
+  font-weight: 800;
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+.step h3 { font-size: 18px; margin-bottom: 8px; }
+.step p { font-size: 14px; color: var(--text-dim); }
+.step code {
+  display: block;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px;
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--accent);
+  font-family: 'SF Mono', Consolas, monospace;
+  overflow-x: auto;
+}
+
+/* Compatible */
+.compat {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+.compat-item {
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-dim);
+}
+.compat-item .logo {
+  font-size: 32px;
+  margin-bottom: 4px;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 40px 20px;
+  border-top: 1px solid var(--border);
+  color: var(--text-dim);
+  font-size: 14px;
+}
+
+/* Terminal demo */
+.terminal {
+  background: #0d1117;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  max-width: 700px;
+  margin: 40px auto 0;
+  overflow: hidden;
+}
+.terminal-header {
+  display: flex;
+  gap: 6px;
+  padding: 12px 16px;
+  background: #161b22;
+  border-bottom: 1px solid var(--border);
+}
+.terminal-dot {
+  width: 12px; height: 12px; border-radius: 50%;
+}
+.terminal-dot.r { background: #ff5f57; }
+.terminal-dot.y { background: #febc2e; }
+.terminal-dot.g { background: #28c840; }
+.terminal-body {
+  padding: 20px;
+  font-family: 'SF Mono', Consolas, monospace;
+  font-size: 14px;
+  line-height: 1.8;
+}
+.terminal-body .prompt { color: var(--accent); }
+.terminal-body .cmd { color: #fff; }
+.terminal-body .out { color: var(--text-dim); }
+
+@media (max-width: 600px) {
+  .hero { padding: 48px 16px 40px; }
+  .hero-stats { gap: 20px; }
+  section { padding: 48px 0; }
+}
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-badge">MCP SECURITY TOOLKIT</div>
+  <h1>ReconStack</h1>
+  <p class="subtitle">21 production-grade MCP servers for OSINT, threat intelligence, and security reconnaissance. Give your AI the tools a pentester uses.</p>
+
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="num">21</div>
+      <div class="label">MCP Servers</div>
+    </div>
+    <div class="hero-stat">
+      <div class="num">13,343+</div>
+      <div class="label">Lines of Code</div>
+    </div>
+    <div class="hero-stat">
+      <div class="num">8</div>
+      <div class="label">Free Tier Servers</div>
+    </div>
+  </div>
+
+  <div class="cta-group">
+    <a href="#pricing" class="btn btn-primary">Get ReconStack — $49</a>
+    <a href="#servers" class="btn btn-secondary">View All Servers</a>
+  </div>
+
+  <div class="terminal">
+    <div class="terminal-header">
+      <div class="terminal-dot r"></div>
+      <div class="terminal-dot y"></div>
+      <div class="terminal-dot g"></div>
+    </div>
+    <div class="terminal-body">
+      <span class="prompt">claude&gt;</span> <span class="cmd">scan example.com for exposed subdomains and check each for known vulnerabilities</span><br>
+      <span class="out">Using CRT.sh to enumerate subdomains... found 47 certificates</span><br>
+      <span class="out">Running Shodan lookup on 12 unique IPs...</span><br>
+      <span class="out">Checking VirusTotal for threat reports...</span><br>
+      <span class="out">Found 3 subdomains with exposed admin panels and 1 with a known CVE.</span>
+    </div>
+  </div>
+</div>
+
+<!-- Servers -->
+<section id="servers">
+  <div class="container">
+    <h2>Every Tool a Security Researcher Needs</h2>
+    <p class="section-sub">Each server is a standalone MCP integration — use them individually or as a complete suite.</p>
+
+    <div class="category">
+      <div class="category-header">
+        <span class="icon">🔍</span>
+        <h3>Reconnaissance</h3>
+      </div>
+      <div class="server-grid">
+        <div class="server-card">
+          <div class="name">Shodan <span class="tag tag-pro">PRO</span></div>
+          <div class="desc">Search internet-connected devices, find exposed services and vulnerabilities</div>
+          <div class="meta"><span class="tag-lines">886 lines</span><span>API key required</span></div>
+        </div>
+        <div class="server-card">
+          <div class="name">CRT.sh <span class="tag tag-free">FREE</span></div>
+          <div class="desc">Certificate transparency log search for subdomain enumeration</div>
+          <div class="meta"><span class="tag-lines">821 lines</span><span>No API key</span></div>
+        </div>
+        <div class="server-card">
+          <div class="name">Nmap <span class="tag tag-pro">PRO</span></div>
+          <div class="desc">Network scanning, port discovery, and service fingerprinting</div>
+          <div class="meta"><span class="tag-lines">271 lines</span><span>No API key</span></div>
+        </div>
+        <div class="server-card">
+          <div class="name">DNSlytics <span class="tag tag-pro">PRO</span></div>
+          <div class="desc">DNS records, IP reputation, reverse lookups, and domain intelligence</div>
+          <div class="meta"><span class="tag-lines">1,009 lines</span><span>No API key</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="category">
+      <div class="category-header">
+        <span class="icon">🛡️</span>
+        <h3>Threat Intelligence</h3>
+      </div>
+      <div class="server-grid">
+        <div class="server-card">
+          <div class="name">VirusTotal <span class="tag tag-pro">PRO</span></div>
+          <div class="desc">Malware analysis, file/URL/domain scanning, threat reports</div>
+          <div class="meta"><span class="tag-lines">1,020 lines</span><span>API key required</span></div>
+        </div>
+        <div class="server-card">
+          <div class="name">TruffleHog <span class="tag tag-pro">PRO</span></div>
+          <div class="desc">Scan repos and files for exposed credentials and secrets</div>
+          <div class="meta"><span class="tag-lines">389 lines</span><span>No API key</span></div>
+        </div>
+        <div class="server-card">
+          <div class="name">GitDorker <span class="tag tag-pro">PRO</span></div>
+          <div class="desc">Find sensitive data exposed in GitHub repositories</div>
+          <div class="meta"><span class="tag-lines">503 lines</span><span>GitHub token</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="category">
+      <div class="category-header">
+        <span class="icon">🔎</span>
+        <h3>Google Dorking</h3>
+      </div>
+      <div class="server-grid">
+        <div class="server-card">
+          <div class="name">Advanced Dorker <span class="tag tag-pro">PRO</span></div>
+          <div class="desc">25+ GHDB-inspired categories, CSV/JSON export, intelligent caching</div>
+          <div class="meta"><span class="tag-lines">1,749 lines</span><span>Google API key</span></div>
+        </div>
+        <div class="server-card">
+          <div class="name">Google Dorker <span class="tag tag-pro">PRO</span></div>
+          <div class="desc">Lightweight targeted Google dorking with preset strategies</div>
+          <div class="meta"><span class="tag-lines">131 lines</span><span>Google API key</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="category">
+      <div class="category-header">
+        <span class="icon">👤</span>
+        <h3>People & Identity OSINT</h3>
+      </div>
+      <div class="server-grid">
+        <div class="server-card">
+          <div class="name">SherlockEye <span class="tag tag-pro">PRO</span></div>
+          <div class="desc">Username search across hundreds of platforms</div>
+          <div class="meta"><span class="tag-lines">589 lines</span><span>No API key</span></div>
+        </div>
+        <div class="server-card">
+          <div class="name">Holehe <span class="tag tag-free">FREE</span></div>
+          <div class="desc">Check which services an email address is registered on</div>
+          <div class="meta"><span class="tag-lines">285 lines</span><span>No API key</span></div>
+        </div>
+        <div class="server-card">
+          <div class="name">PhoneInfoga <span class="tag tag-pro">PRO</span></div>
+          <div class="desc">Phone number OSINT — carrier, location, social accounts</div>
+          <div class="meta"><span class="tag-lines">342 lines</span><span>No API key</span></div>
+        </div>
+        <div class="server-card">
+          <div class="name">Social Analyzer <span class="tag tag-free">FREE</span></div>
+          <div class="desc">Detect social media presence across platforms</div>
+          <div class="meta"><span class="tag-lines">260 lines</span><span>No API key</span></div>
+        </div>
+        <div class="server-card">
+          <div class="name">DeHashed <span class="tag tag-pro">PRO</span></div>
+          <div class="desc">Search breach databases for exposed credentials</div>
+          <div class="meta"><span class="tag-lines">669 lines</span><span>API key required</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="category">
+      <div class="category-header">
+        <span class="icon">🏢</span>
+        <h3>Corporate Intelligence</h3>
+      </div>
+      <div class="server-grid">
+        <div class="server-card">
+          <div class="name">OpenCorporates <span class="tag tag-pro">PRO</span></div>
+          <div class="desc">Search 200M+ global corporate records</div>
+          <div class="meta"><span class="tag-lines">726 lines</span><span>Optional API key</span></div>
+        </div>
+        <div class="server-card">
+          <div class="name">CorpData <span class="tag tag-pro">PRO</span></div>
+          <div class="desc">US corporate/nonprofit intelligence — 990s, SEC filings</div>
+          <div class="meta"><span class="tag-lines">756 lines</span><span>API key required</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="category">
+      <div class="category-header">
+        <span class="icon">🌐</span>
+        <h3>Web & Archive Intelligence</h3>
+      </div>
+      <div class="server-grid">
+        <div class="server-card">
+          <div class="name">Wayback Machine <span class="tag tag-free">FREE</span></div>
+          <div class="desc">Access historical snapshots of any website via Internet Archive</div>
+          <div class="meta"><span class="tag-lines">932 lines</span><span>No API key</span></div>
+        </div>
+        <div class="server-card">
+          <div class="name">ExifTool <span class="tag tag-free">FREE</span></div>
+          <div class="desc">Extract metadata from images, PDFs, documents, and media files</div>
+          <div class="meta"><span class="tag-lines">592 lines</span><span>No API key</span></div>
+        </div>
+        <div class="server-card">
+          <div class="name">Urban Scout <span class="tag tag-pro">PRO</span></div>
+          <div class="desc">Physical location OSINT — nearby businesses, demographics</div>
+          <div class="meta"><span class="tag-lines">686 lines</span><span>API key required</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="category">
+      <div class="category-header">
+        <span class="icon">📡</span>
+        <h3>Advanced</h3>
+      </div>
+      <div class="server-grid">
+        <div class="server-card">
+          <div class="name">Telegram OSINT <span class="tag tag-pro">PRO</span></div>
+          <div class="desc">Search and monitor Telegram channels, groups, and messages</div>
+          <div class="meta"><span class="tag-lines">236 lines</span><span>Telegram API</span></div>
+        </div>
+        <div class="server-card">
+          <div class="name">Neo4j OSINT <span class="tag tag-pro">PRO</span></div>
+          <div class="desc">Graph-based entity resolution and relationship mapping</div>
+          <div class="meta"><span class="tag-lines">492 lines</span><span>Neo4j instance</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- How it works -->
+<section style="background: var(--surface);">
+  <div class="container">
+    <h2>Up and Running in 3 Minutes</h2>
+    <p class="section-sub">Works with any MCP-compatible AI client.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Download & Extract</h3>
+        <p>Get the zip, extract it anywhere on your machine.</p>
+        <code>unzip reconstack-pro.zip -d ~/reconstack</code>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Install & Configure</h3>
+        <p>Run the installer, add your API keys, configure Claude Desktop.</p>
+        <code>./install.sh && cp .env.example .env<br>./configure-claude.sh</code>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Start Investigating</h3>
+        <p>Ask Claude to perform security research using natural language.</p>
+        <code>"Enumerate subdomains for target.com and check for exposed services"</code>
+      </div>
+    </div>
+
+    <div class="compat">
+      <div class="compat-item"><div class="logo">🤖</div>Claude Desktop</div>
+      <div class="compat-item"><div class="logo">⌨️</div>Claude Code</div>
+      <div class="compat-item"><div class="logo">📝</div>Cursor</div>
+      <div class="compat-item"><div class="logo">🌊</div>Windsurf</div>
+      <div class="compat-item"><div class="logo">🐳</div>MCP Docker</div>
+    </div>
+  </div>
+</section>
+
+<!-- Pricing -->
+<section id="pricing">
+  <div class="container">
+    <h2>Simple Pricing</h2>
+    <p class="section-sub">One purchase. All 21 servers. Lifetime updates.</p>
+
+    <div class="pricing-grid">
+      <div class="price-card">
+        <h3>Community</h3>
+        <div class="price">Free</div>
+        <p class="price-alt">&nbsp;</p>
+        <ul>
+          <li>8 MCP servers</li>
+          <li>CRT.sh, Dorking, ExifTool, Google Dorker, Holehe, Social Analyzer, TruffleHog, Wayback</li>
+          <li>Mix of keyless and API-backed tools</li>
+          <li>Full source code</li>
+          <li>Community support</li>
+        </ul>
+        <a href="#" class="btn btn-secondary" id="btn-free">Download Free</a>
+      </div>
+
+      <div class="price-card featured">
+        <h3>Pro</h3>
+        <div class="price">$49 <span>one-time</span></div>
+        <p class="price-alt">or $149 for team license (up to 10 seats)</p>
+        <ul>
+          <li>All 21 MCP servers</li>
+          <li>Shodan, VirusTotal, DeHashed, Dorker, and 12 more</li>
+          <li>One-command installer & Claude Desktop config</li>
+          <li>Docker Compose deployment</li>
+          <li>Lifetime updates</li>
+          <li>Priority support</li>
+        </ul>
+        <a href="#" class="btn btn-primary" id="btn-pro">Get Pro — $49</a>
+      </div>
+    </div>
+    <p style="text-align: center; margin-top: 14px; color: var(--text-dim); font-size: 13px;">
+      Seller note: replace both <code>href=\"#\"</code> purchase links with your Gumroad product URLs before publishing.
+    </p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section style="background: var(--surface);">
+  <div class="container">
+    <h2>FAQ</h2>
+    <div style="max-width: 700px; margin: 0 auto;">
+      <div style="margin-bottom: 24px;">
+        <h3 style="font-size: 16px; margin-bottom: 8px;">What is MCP?</h3>
+        <p style="color: var(--text-dim); font-size: 14px;">Model Context Protocol (MCP) is an open standard that lets AI assistants like Claude, Cursor, and Windsurf use external tools. Each ReconStack server adds specific OSINT capabilities to your AI.</p>
+      </div>
+      <div style="margin-bottom: 24px;">
+        <h3 style="font-size: 16px; margin-bottom: 8px;">Do I need all the API keys?</h3>
+        <p style="color: var(--text-dim); font-size: 14px;">No. Key requirements vary by server. Several tools run without API keys (for example CRT.sh, Wayback, ExifTool, Holehe, Social Analyzer, Nmap), while others require provider credentials.</p>
+      </div>
+      <div style="margin-bottom: 24px;">
+        <h3 style="font-size: 16px; margin-bottom: 8px;">Is this legal?</h3>
+        <p style="color: var(--text-dim); font-size: 14px;">Yes. ReconStack uses only publicly available APIs and data sources. It's the same toolkit security professionals and bug bounty hunters use daily — just integrated with your AI assistant.</p>
+      </div>
+      <div style="margin-bottom: 24px;">
+        <h3 style="font-size: 16px; margin-bottom: 8px;">What's included in lifetime updates?</h3>
+        <p style="color: var(--text-dim); font-size: 14px;">Bug fixes, new server additions, and compatibility updates. Pro buyers get access to the private GitHub repo for pull access to all future updates.</p>
+      </div>
+      <div style="margin-bottom: 24px;">
+        <h3 style="font-size: 16px; margin-bottom: 8px;">Can I use this for bug bounty?</h3>
+        <p style="color: var(--text-dim); font-size: 14px;">Absolutely. ReconStack is built for exactly this. Enumerate subdomains, scan for exposed services, check for leaked credentials, and generate reports — all through natural language.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>&copy; 2025 ReconStack. Built for security professionals.</p>
+    <p style="margin-top: 8px;"><a href="mailto:support@reconstack.dev">support@reconstack.dev</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
